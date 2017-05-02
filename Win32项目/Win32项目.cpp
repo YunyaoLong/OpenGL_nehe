@@ -27,13 +27,13 @@ LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
 
-HGLRC           hRC = NULL;   // 窗口着色描述表句柄   
-HDC             hDC = NULL;   // OpenGL渲染描述表句柄   
-HWND            hWnd = NULL;  // 保存我们的窗口句柄   
-HINSTANCE       hInstance;  // 保存程序的实例 
-bool    keys[256];  // 保存键盘按键的数组   
-bool    active = TRUE;    // 窗口的活动标志，缺省为TRUE   
-bool    fullscreen = TRUE;    // 全屏标志缺省，缺省设定成全屏模式 
+HGLRC           hRC = NULL;		// 窗口着色描述表句柄   
+HDC             hDC = NULL;		// OpenGL渲染描述表句柄   
+HWND            hWnd = NULL;	// 保存我们的窗口句柄   
+HINSTANCE       hInstance;		// 保存程序的实例 
+bool    keys[256];				// 保存键盘按键的数组   
+bool    active = TRUE;			// 窗口的活动标志，缺省为TRUE   
+bool    fullscreen = TRUE;		// 全屏标志缺省，缺省设定成全屏模式 
 
 LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// Declaration For WndProc
 
@@ -91,6 +91,29 @@ int DrawGLScene(GLvoid)									// 从这里开始进行所有的绘制
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// 清除屏幕和深度缓存
 	glLoadIdentity();									// 重置当前的模型观察矩阵
+	//当您调用glLoadIdentity()之后，您实际上将当前点移到了屏幕中心，X坐标轴从左至右，Y坐标轴从下至上，Z坐标轴从里至外。
+	//中心左面的坐标值是负值，右面是正值。移向屏幕顶端是正值，移向屏幕底端是负值。移入屏幕深处是负值，移出屏幕则是正值。 
+
+	//glTranslatef(x, y, z)沿着 X, Y 和 Z 轴移动。
+	//根据前面的次序，下面的代码沿着X轴左移1.5个单位，Y轴不动(0.0f)，最后移入屏幕6.0f个单位。
+	//注意在glTranslatef(x, y, z)中当您移动的时候，您并不是相对屏幕中心移动，而是相对与当前所在的屏幕位置。
+	glTranslatef(-1.5f, 0.0f, -6.0f);					// 左移 1.5 单位，并移入屏幕 6.0
+	//glBegin(GL_TRIANGLES)的意思是开始绘制三角形，glEnd() 告诉OpenGL三角形已经创建好了。
+	//本节的简单示例中，我们只画一个三角形。如果要画第二个三角形的话，可以在这三点之后，再加三行代码(3点)。
+	glBegin(GL_TRIANGLES);								// Drawing Using Triangles
+	glVertex3f(0.0f, 1.0f, 0.0f);						// Top
+	glVertex3f(-1.0f, -1.0f, 0.0f);						// Bottom Left
+	glVertex3f(1.0f, -1.0f, 0.0f);						// Bottom Right
+	glEnd();											// Finished Drawing The Triangle
+	//在屏幕的左半部分画完三角形后，我们要移到右半部分来画正方形。为此要再次使用glTranslate。
+	glTranslatef(3.0f, 0.0f, 0.0f);						// Move Right 3 Units
+	//现在使用GL_QUADS绘制正方形。
+	glBegin(GL_QUADS);									// Draw A Quad
+	glVertex3f(-1.0f, 1.0f, 0.0f);						// Top Left
+	glVertex3f(1.0f, 1.0f, 0.0f);						// Top Right
+	glVertex3f(1.0f, -1.0f, 0.0f);						// Bottom Right
+	glVertex3f(-1.0f, -1.0f, 0.0f);						// Bottom Left
+	glEnd();											// Done Drawing The Quad
 	return TRUE;										// Everything Went OK
 }
 
@@ -479,11 +502,11 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// 当前窗口实例
 			//下面的一点代码是最近新加的(05-01-00)。允许用户按下F1键在全屏模式和窗口模式间切换。
 			if (keys[VK_F1])						// Is F1 Being Pressed?
 			{
-				keys[VK_F1] = FALSE;				// If So Make Key FALSE
+				keys[VK_F1] = FALSE;					// If So Make Key FALSE
 				KillGLWindow();						// Kill Our Current Window
-				fullscreen = !fullscreen;			// Toggle Fullscreen / Windowed Mode
-													// Recreate Our OpenGL Window
-				if (!CreateGLWindow("NeHe's OpenGL Framework", 640, 480, 16, fullscreen))
+				fullscreen = !fullscreen;				// Toggle Fullscreen / Windowed Mode
+														// Recreate Our OpenGL Window
+				if (!CreateGLWindow("NeHe's 第一个多边形程序", 640, 480, 16, fullscreen))
 				{
 					return 0;						// Quit If Window Was Not Created
 				}
