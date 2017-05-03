@@ -35,6 +35,9 @@ bool    keys[256];				// 保存键盘按键的数组
 bool    active = TRUE;			// 窗口的活动标志，缺省为TRUE   
 bool    fullscreen = TRUE;		// 全屏标志缺省，缺省设定成全屏模式 
 
+GLfloat	rtri;				// Angle For The Triangle ( NEW )
+GLfloat	rquad;				// Angle For The Quad ( NEW )
+
 LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// Declaration For WndProc
 
 GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize The GL Window
@@ -98,22 +101,35 @@ int DrawGLScene(GLvoid)									// 从这里开始进行所有的绘制
 	//根据前面的次序，下面的代码沿着X轴左移1.5个单位，Y轴不动(0.0f)，最后移入屏幕6.0f个单位。
 	//注意在glTranslatef(x, y, z)中当您移动的时候，您并不是相对屏幕中心移动，而是相对与当前所在的屏幕位置。
 	glTranslatef(-1.5f, 0.0f, -6.0f);					// 左移 1.5 单位，并移入屏幕 6.0
+	glRotatef(rtri, 0.0f, 0.0f, 1.0f);					// Rotate The Triangle On The Y axis ( NEW )
 	//glBegin(GL_TRIANGLES)的意思是开始绘制三角形，glEnd() 告诉OpenGL三角形已经创建好了。
 	//本节的简单示例中，我们只画一个三角形。如果要画第二个三角形的话，可以在这三点之后，再加三行代码(3点)。
 	glBegin(GL_TRIANGLES);								// Drawing Using Triangles
+	//接下来的一行代码设置三角形的第一个顶点(三角形的上顶点)，并使用当前颜色(红色)来绘制。
+	glColor3f(1.0f, 0.0f, 0.0f);						// 设置当前色为红色
 	glVertex3f(0.0f, 1.0f, 0.0f);						// Top
+	glColor3f(0.0f, 1.0f, 0.0f);						// 设置当前色为绿色
 	glVertex3f(-1.0f, -1.0f, 0.0f);						// Bottom Left
+	glColor3f(0.0f, 0.0f, 1.0f);						// 设置当前色为蓝色
 	glVertex3f(1.0f, -1.0f, 0.0f);						// Bottom Right
 	glEnd();											// Finished Drawing The Triangle
 	//在屏幕的左半部分画完三角形后，我们要移到右半部分来画正方形。为此要再次使用glTranslate。
-	glTranslatef(3.0f, 0.0f, 0.0f);						// Move Right 3 Units
+	glLoadIdentity();									// 重置模型观察矩阵
+	glTranslatef(1.5f, 0.0f, -6.0f);						// Move Right 3 Units
+	glRotatef(rquad, 1.0f, 0.0f, 0.0f);					//  绕X轴旋转四边形
 	//现在使用GL_QUADS绘制正方形。
 	glBegin(GL_QUADS);									// Draw A Quad
+	//glColor3f(1.0f, 0.0f, 0.0f);						// 将当前色设置为蓝色
 	glVertex3f(-1.0f, 1.0f, 0.0f);						// Top Left
 	glVertex3f(1.0f, 1.0f, 0.0f);						// Top Right
+	//glColor3f(0.0f, 0.1f, 0.0f);						// 将当前色设置为蓝色
 	glVertex3f(1.0f, -1.0f, 0.0f);						// Bottom Right
 	glVertex3f(-1.0f, -1.0f, 0.0f);						// Bottom Left
 	glEnd();											// Done Drawing The Quad
+	if (rtri >= 360.0f) rtri -= 360.0;					// control the range of the rtri
+	if (rtri <= 0.0f) rtri += 360.0;
+	rtri += 0.2f;										// Increase The Rotation Variable For The Triangle ( NEW )
+	rquad -= 0.15f;      // 减少四边形的旋转变量
 	return TRUE;										// Everything Went OK
 }
 
@@ -464,7 +480,7 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// 当前窗口实例
 	//就这么简单！我很欣赏这段代码的简洁。
 	//如果未能创建成功，函数返回FALSE。程序立即退出。 
 	// Create Our OpenGL Window
-	if (!CreateGLWindow("NeHe's OpenGL程序框架", 640, 480, 16, fullscreen))
+	if (!CreateGLWindow("NeHe's颜色实例", 640, 480, 16, fullscreen))
 	{
 		return 0;									// Quit If Window Was Not Created
 	}
