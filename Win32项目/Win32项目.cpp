@@ -101,17 +101,35 @@ int DrawGLScene(GLvoid)									// 从这里开始进行所有的绘制
 	//根据前面的次序，下面的代码沿着X轴左移1.5个单位，Y轴不动(0.0f)，最后移入屏幕6.0f个单位。
 	//注意在glTranslatef(x, y, z)中当您移动的时候，您并不是相对屏幕中心移动，而是相对与当前所在的屏幕位置。
 	glTranslatef(-1.5f, 0.0f, -6.0f);					// 左移 1.5 单位，并移入屏幕 6.0
-	glRotatef(rtri, 0.0f, 0.0f, 1.0f);					// Rotate The Triangle On The Y axis ( NEW )
+	glRotatef(rtri, 1.0f, 0.0f, 0.0f);					// Rotate The Triangle On The Y axis ( NEW )
 	//glBegin(GL_TRIANGLES)的意思是开始绘制三角形，glEnd() 告诉OpenGL三角形已经创建好了。
 	//本节的简单示例中，我们只画一个三角形。如果要画第二个三角形的话，可以在这三点之后，再加三行代码(3点)。
 	glBegin(GL_TRIANGLES);								// Drawing Using Triangles
 	//接下来的一行代码设置三角形的第一个顶点(三角形的上顶点)，并使用当前颜色(红色)来绘制。
-	glColor3f(1.0f, 0.0f, 0.0f);						// 设置当前色为红色
-	glVertex3f(0.0f, 1.0f, 0.0f);						// Top
-	glColor3f(0.0f, 1.0f, 0.0f);						// 设置当前色为绿色
-	glVertex3f(-1.0f, -1.0f, 0.0f);						// Bottom Left
-	glColor3f(0.0f, 0.0f, 1.0f);						// 设置当前色为蓝色
-	glVertex3f(1.0f, -1.0f, 0.0f);						// Bottom Right
+	glColor3f(1.0f, 0.0f, 0.0f);						// Red
+	glVertex3f(0.0f, 1.0f, 0.0f);					// Top Of Triangle (Front)
+	glColor3f(0.0f, 1.0f, 0.0f);						// Green
+	glVertex3f(-1.0f, -1.0f, 1.0f);					// Left Of Triangle (Front)
+	glColor3f(0.0f, 0.0f, 1.0f);						// Blue
+	glVertex3f(1.0f, -1.0f, 1.0f);					// Right Of Triangle (Front)
+	glColor3f(1.0f, 0.0f, 0.0f);						// Red
+	glVertex3f(0.0f, 1.0f, 0.0f);					// Top Of Triangle (Right)
+	glColor3f(0.0f, 0.0f, 1.0f);						// Blue
+	glVertex3f(1.0f, -1.0f, 1.0f);					// Left Of Triangle (Right)
+	glColor3f(0.0f, 1.0f, 0.0f);						// Green
+	glVertex3f(1.0f, -1.0f, -1.0f);					// Right Of Triangle (Right)
+	glColor3f(1.0f, 0.0f, 0.0f);						// Red
+	glVertex3f(0.0f, 1.0f, 0.0f);					// Top Of Triangle (Back)
+	glColor3f(0.0f, 1.0f, 0.0f);						// Green
+	glVertex3f(1.0f, -1.0f, -1.0f);					// Left Of Triangle (Back)
+	glColor3f(0.0f, 0.0f, 1.0f);						// Blue
+	glVertex3f(-1.0f, -1.0f, -1.0f);					// Right Of Triangle (Back)
+	glColor3f(1.0f, 0.0f, 0.0f);						// Red
+	glVertex3f(0.0f, 1.0f, 0.0f);					// Top Of Triangle (Left)
+	glColor3f(0.0f, 0.0f, 1.0f);						// Blue
+	glVertex3f(-1.0f, -1.0f, -1.0f);					// Left Of Triangle (Left)
+	glColor3f(0.0f, 1.0f, 0.0f);						// Green
+	glVertex3f(-1.0f, -1.0f, 1.0f);					// Right Of Triangle (Left)
 	glEnd();											// Finished Drawing The Triangle
 	//在屏幕的左半部分画完三角形后，我们要移到右半部分来画正方形。为此要再次使用glTranslate。
 	glLoadIdentity();									// 重置模型观察矩阵
@@ -119,12 +137,36 @@ int DrawGLScene(GLvoid)									// 从这里开始进行所有的绘制
 	glRotatef(rquad, 1.0f, 0.0f, 0.0f);					//  绕X轴旋转四边形
 	//现在使用GL_QUADS绘制正方形。
 	glBegin(GL_QUADS);									// Draw A Quad
-	//glColor3f(1.0f, 0.0f, 0.0f);						// 将当前色设置为蓝色
-	glVertex3f(-1.0f, 1.0f, 0.0f);						// Top Left
-	glVertex3f(1.0f, 1.0f, 0.0f);						// Top Right
-	//glColor3f(0.0f, 0.1f, 0.0f);						// 将当前色设置为蓝色
-	glVertex3f(1.0f, -1.0f, 0.0f);						// Bottom Right
-	glVertex3f(-1.0f, -1.0f, 0.0f);						// Bottom Left
+	glColor3f(0.0f, 1.0f, 0.0f);						// Set The Color To Green
+	glVertex3f(1.0f, 1.0f, -1.0f);					// Top Right Of The Quad (Top)
+	glVertex3f(-1.0f, 1.0f, -1.0f);					// Top Left Of The Quad (Top)
+	glVertex3f(-1.0f, 1.0f, 1.0f);					// Bottom Left Of The Quad (Top)
+	glVertex3f(1.0f, 1.0f, 1.0f);					// Bottom Right Of The Quad (Top)
+	glColor3f(1.0f, 0.5f, 0.0f);						// Set The Color To Orange
+	glVertex3f(1.0f, -1.0f, 1.0f);					// Top Right Of The Quad (Bottom)
+	glVertex3f(-1.0f, -1.0f, 1.0f);					// Top Left Of The Quad (Bottom)
+	glVertex3f(-1.0f, -1.0f, -1.0f);					// Bottom Left Of The Quad (Bottom)
+	glVertex3f(1.0f, -1.0f, -1.0f);					// Bottom Right Of The Quad (Bottom)
+	glColor3f(1.0f, 0.0f, 0.0f);						// Set The Color To Red
+	glVertex3f(1.0f, 1.0f, 1.0f);					// Top Right Of The Quad (Front)
+	glVertex3f(-1.0f, 1.0f, 1.0f);					// Top Left Of The Quad (Front)
+	glVertex3f(-1.0f, -1.0f, 1.0f);					// Bottom Left Of The Quad (Front)
+	glVertex3f(1.0f, -1.0f, 1.0f);					// Bottom Right Of The Quad (Front)
+	glColor3f(1.0f, 1.0f, 0.0f);						// Set The Color To Yellow
+	glVertex3f(1.0f, -1.0f, -1.0f);					// Top Right Of The Quad (Back)
+	glVertex3f(-1.0f, -1.0f, -1.0f);					// Top Left Of The Quad (Back)
+	glVertex3f(-1.0f, 1.0f, -1.0f);					// Bottom Left Of The Quad (Back)
+	glVertex3f(1.0f, 1.0f, -1.0f);					// Bottom Right Of The Quad (Back)
+	glColor3f(0.0f, 0.0f, 1.0f);						// Set The Color To Blue
+	glVertex3f(-1.0f, 1.0f, 1.0f);					// Top Right Of The Quad (Left)
+	glVertex3f(-1.0f, 1.0f, -1.0f);					// Top Left Of The Quad (Left)
+	glVertex3f(-1.0f, -1.0f, -1.0f);					// Bottom Left Of The Quad (Left)
+	glVertex3f(-1.0f, -1.0f, 1.0f);					// Bottom Right Of The Quad (Left)
+	glColor3f(1.0f, 0.0f, 1.0f);						// Set The Color To Violet
+	glVertex3f(1.0f, 1.0f, -1.0f);					// Top Right Of The Quad (Right)
+	glVertex3f(1.0f, 1.0f, 1.0f);					// Top Left Of The Quad (Right)
+	glVertex3f(1.0f, -1.0f, 1.0f);					// Bottom Left Of The Quad (Right)
+	glVertex3f(1.0f, -1.0f, -1.0f);					// Bottom Right Of The Quad (Right)
 	glEnd();											// Done Drawing The Quad
 	if (rtri >= 360.0f) rtri -= 360.0;					// control the range of the rtri
 	if (rtri <= 0.0f) rtri += 360.0;

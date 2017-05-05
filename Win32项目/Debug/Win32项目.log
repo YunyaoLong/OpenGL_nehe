@@ -1,4 +1,4 @@
 ﻿  Win32项目.cpp
-d:\visual_studio_workspace\win32项目\win32项目\win32项目.cpp(340): warning C4838: 从“int”转换到“BYTE”需要收缩转换
+d:\visual_studio_workspace\win32项目\win32项目\win32项目.cpp(382): warning C4838: 从“int”转换到“BYTE”需要收缩转换
   Win32项目.vcxproj -> D:\visual_studio_workspace\Win32项目\Debug\Win32项目.exe
   Win32项目.vcxproj -> D:\visual_studio_workspace\Win32项目\Debug\Win32项目.pdb (Full PDB)
